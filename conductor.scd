@@ -105,7 +105,7 @@
 
 		" ============= 'SILENCE'".postln;
 		~scene = nil;
-		~voicer.roli.releaseAll;
+		~voicer.plant.releaseAll;
 		7.wait;
 		}
 	});

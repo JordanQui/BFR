@@ -1,5 +1,5 @@
 ~voicer.clap = { |q, chan, note, vel|
-		~voicer.roli.prime(\plt_clap);
+	~voicer.roli.prime(\plt_clap);
 
 	if(rand(~density/100).coin, {
 		~voicer.roli.put(note, [

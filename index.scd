@@ -4,8 +4,6 @@
 
 // Quarks.install("JITLibExtensions");
 
-~plt = 1;
-~density = 25;
 
 ~root = PathName.new(thisProcess.nowExecutingPath).pathOnly;
 ~rootNote = 0;
@@ -22,19 +20,17 @@
 	~time.tempo_(1);
 
 	// load dependencies
-	PathName(~root ++ "base/lib.scd").fullPath.load;s.sync;
-	PathName(~root ++ "base/planteDetector.scd").fullPath.load;s.sync;
 	PathName(~root ++ "base/synths.scd").fullPath.load;s.sync;
-	PathName(~root ++ "base/adresses.scd").fullPath.load;s.sync;
-	PathName(~root ++ "base/midiscenes.scd").fullPath.load;s.sync;
-	PathName(~root ++ "base/oscresponders.scd").fullPath.load;s.sync;
-	PathName(~root ++ "base/remoteStarter.scd").fullPath.load;s.sync;
+
+	PathName(~root ++ "base/init.scd").fullPath.load;s.sync;
+	PathName(~root ++ "base/midiresponders.scd").fullPath.load;s.sync;
+	
 
 	// // midi ignition
 	~makeMidiVoice.value;
 	s.sync;
-	~voicer.roli.play;
-	//
+	~voicer.plant.play(out:~bus, group:~sources);
+
 	// // load modules
 	// PathName(~root ++ "modules/poemPlayer.scd").fullPath.load;s.sync;
 	// PathName(~root ++ "modules/percussions.scd").fullPath.load;s.sync;
@@ -46,13 +42,13 @@
 	// PathName(~root ++ "modules/kronikBack.scd").fullPath.load;s.sync;
 	// PathName(~root ++ "modules/clap.scd").fullPath.load;s.sync;
 
-	//
+
 	// // welcome sound
-	Pdef(\x, Pbind(\dur, 0.1, \note, Pseq([-12,12], 1))).play;s.sync;
-	//
+	Pdef(\x, Pbind(\out, ~bus, \dur, 0.03, \degree, Pseq([[0,3,5,7,9]], 1))).play;s.sync;
+	
 	// // play conductor
-	// PathName(~root ++ "conductor.scd").fullPath.load;s.sync;
-	// ~time.sched(0, ~conductor);
+	PathName(~root ++ "conductor.scd").fullPath.load;s.sync;
+	~time.sched(0, ~conductor);
 	// ~conductor.play;
 
 	// tests
@@ -61,7 +57,11 @@
 	~lib[\samplesYoumna].postln;
 
 	("LISTENING ON PORT : " + thisProcess.openPorts).postln;
-	s.prepareForRecord("/home/pi/record.aif", 1);
-	};
+	// s.prepareForRecord("/home/pi/record.aif", 1);
+	s.queryAllNodes;
+};
 
 s.waitForBoot({ ~soloLoad.play(AppClock) });
+
+
+

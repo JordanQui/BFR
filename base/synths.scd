@@ -210,4 +210,17 @@ SynthDef(\plt_clap, {
     Out.ar(out, Pan2.ar(snd,pan,amp));
 	}).add;
 
+
+
+
+
 "synths loaded ------------------------------------------------".postln;
+
+SynthDef(\silence, {}).add;
+
+SynthDef(\rvb, { arg outBus = 0, inBus;
+    var input;
+    input = In.ar(inBus, 2);
+    16.do({ input = AllpassC.ar(input, 0.04, Rand(0.001,0.04), 3)});
+    Out.ar(outBus, input);
+}).store;
